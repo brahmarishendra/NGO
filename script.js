@@ -1,5 +1,44 @@
 // Smooth scrolling for navigation links
 document.addEventListener('DOMContentLoaded', function() {
+    // Mobile Navigation Toggle
+    const hamburger = document.querySelector('.hamburger');
+    const mobileNav = document.querySelector('.mobile-nav');
+    const body = document.body;
+    
+    if (hamburger && mobileNav) {
+        hamburger.addEventListener('click', function() {
+            // Toggle mobile nav visibility
+            mobileNav.classList.toggle('active');
+            hamburger.classList.toggle('active');
+            
+            // Prevent body scroll when mobile nav is open
+            if (mobileNav.classList.contains('active')) {
+                body.style.overflow = 'hidden';
+            } else {
+                body.style.overflow = '';
+            }
+        });
+        
+        // Close mobile nav when clicking on nav links
+        const mobileNavLinks = mobileNav.querySelectorAll('a');
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                mobileNav.classList.remove('active');
+                hamburger.classList.remove('active');
+                body.style.overflow = '';
+            });
+        });
+        
+        // Close mobile nav when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!hamburger.contains(e.target) && !mobileNav.contains(e.target)) {
+                mobileNav.classList.remove('active');
+                hamburger.classList.remove('active');
+                body.style.overflow = '';
+            }
+        });
+    }
+    
     // Set active navigation state based on current page
     setActiveNavigation();
     
