@@ -2921,6 +2921,10 @@ body.mobile-nav-open {
 
 /* Responsive Design */
 @media (max-width: 1440px) {
+    .hamburger {
+        display: flex;
+    }
+    
     .header-content {
         padding: 0 50px;
     }
