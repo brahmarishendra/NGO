@@ -16,8 +16,14 @@ document.addEventListener('DOMContentLoaded', function() {
             // Prevent body scroll when nav is open
             if (mobileNav.classList.contains('active')) {
                 body.style.overflow = 'hidden';
+                mobileNav.style.display = 'block';
             } else {
                 body.style.overflow = '';
+                setTimeout(() => {
+                    if (!mobileNav.classList.contains('active')) {
+                        mobileNav.style.display = 'none';
+                    }
+                }, 300);
             }
         });
         
@@ -27,6 +33,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 mobileNav.classList.remove('active');
                 hamburger.classList.remove('active');
                 body.style.overflow = '';
+                setTimeout(() => {
+                    mobileNav.style.display = 'none';
+                }, 300);
             }
         });
         
@@ -37,6 +46,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 mobileNav.classList.remove('active');
                 hamburger.classList.remove('active');
                 body.style.overflow = '';
+                setTimeout(() => {
+                    mobileNav.style.display = 'none';
+                }, 300);
             });
         });
     }
