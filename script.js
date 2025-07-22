@@ -1,5 +1,119 @@
 // Main JavaScript functionality
 document.addEventListener('DOMContentLoaded', function() {
+    // Hamburger Menu Toggle
+    const hamburger = document.getElementById('hamburger');
+    const mobileNav = document.getElementById('mobileNav');
+    const body = document.body;
+    
+    if (hamburger && mobileNav) {
+        hamburger.addEventListener('click', function(e) {
+            e.stopPropagation();
+            
+            // Toggle classes
+            hamburger.classList.toggle('active');
+            mobileNav.classList.toggle('active');
+            
+            // Prevent body scroll when nav is open
+            if (mobileNav.classList.contains('active')) {
+                body.style.overflow = 'hidden';
+            } else {
+                body.style.overflow = '';
+            }
+        });
+        
+        // Close mobile nav when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!mobileNav.contains(e.target) && !hamburger.contains(e.target)) {
+                hamburger.classList.remove('active');
+                mobileNav.classList.remove('active');
+                body.style.overflow = '';
+            }
+        });
+        
+        // Close mobile nav when clicking nav links
+        const mobileNavLinks = mobileNav.querySelectorAll('.mobile-nav-link');
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                hamburger.classList.remove('active');
+                mobileNav.classList.remove('active');
+                body.style.overflow = '';
+            });
+        });
+    }
+    
+    // Causes Carousel Functionality
+    const causesGrid = document.getElementById('causesGrid');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    
+    if (causesGrid && prevBtn && nextBtn) {
+        let currentIndex = 0;
+        const cards = causesGrid.querySelectorAll('.cause-card');
+        const totalCards = cards.length;
+        const cardWidth = 312; // 280px + 32px gap
+        
+        function updateCarousel() {
+            const maxIndex = Math.max(0, totalCards - Math.floor(causesGrid.offsetWidth / cardWidth));
+            currentIndex = Math.max(0, Math.min(currentIndex, maxIndex));
+            
+            const translateX = -currentIndex * cardWidth;
+            causesGrid.style.transform = `translateX(${translateX}px)`;
+            
+            // Update button states
+            prevBtn.style.opacity = currentIndex === 0 ? '0.5' : '1';
+            nextBtn.style.opacity = currentIndex >= maxIndex ? '0.5' : '1';
+        }
+        
+        prevBtn.addEventListener('click', function() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateCarousel();
+            }
+        });
+        
+        nextBtn.addEventListener('click', function() {
+            const maxIndex = Math.max(0, totalCards - Math.floor(causesGrid.offsetWidth / cardWidth));
+            if (currentIndex < maxIndex) {
+                currentIndex++;
+                updateCarousel();
+            }
+        });
+        
+        // Auto-scroll functionality
+        let autoScrollInterval = setInterval(() => {
+            const maxIndex = Math.max(0, totalCards - Math.floor(causesGrid.offsetWidth / cardWidth));
+            if (currentIndex < maxIndex) {
+                currentIndex++;
+            } else {
+                currentIndex = 0;
+            }
+            updateCarousel();
+        }, 5000);
+        
+        // Pause auto-scroll on hover
+        causesGrid.addEventListener('mouseenter', () => {
+            clearInterval(autoScrollInterval);
+        });
+        
+        causesGrid.addEventListener('mouseleave', () => {
+            autoScrollInterval = setInterval(() => {
+                const maxIndex = Math.max(0, totalCards - Math.floor(causesGrid.offsetWidth / cardWidth));
+                if (currentIndex < maxIndex) {
+                    currentIndex++;
+                } else {
+                    currentIndex = 0;
+                }
+                updateCarousel();
+            }, 5000);
+        });
+        
+        // Update on window resize
+        window.addEventListener('resize', updateCarousel);
+        
+        // Initial update
+        updateCarousel();
+    }
+    
     // Mobile Navigation Toggle
     const hamburger = document.querySelector('.hamburger');
     const mobileNav = document.querySelector('.mobile-nav');
